@@ -2,12 +2,12 @@ let express = require('express')
 let mongoose = require('mongoose')
 let app = express()
 let dotenv = require('dotenv').config()
+let path = require('path')
 
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 3001
 
 mongoose.connect(`mongodb+srv://admin:${process.env.MONGODB_ADMIN_PASSWORD}@cluster0.ljlhu.mongodb.net/books?retryWrites=true&w=majority`)
 
-if (process.env.NODE_ENV == 'production') express.static('client/build')
 
 app.use(
     express.json(),
@@ -15,4 +15,10 @@ app.use(
     require('./routes')
 )
 
+if (process.env.NODE_ENV == 'production') app.use(express.static(path.join(__dirname, "client", "build")))
+
+app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+})
+ 
 app.listen(PORT, () => console.log('listening 👂'))
