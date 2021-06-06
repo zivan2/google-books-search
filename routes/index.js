@@ -9,4 +9,6 @@ rt
 .get('/books', booksController.findById)
 .post('/books', booksController.create)
 
+rt.get('/booksall', booksController.findAll)
+
 module.exports = rt
